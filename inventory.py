@@ -57,3 +57,25 @@ def display_low_stock_report(inventory, limit):
         print(f"{item_id:<7} | {name:<27} | {price:<16} | {stock:<15}")
     
     print("-" * 75)
+    
+def sort_catalog_by_price(inventory, ascending=True):
+    #uses a Lambda function and sorted to arrange the product by price"
+    sorted_items = sorted(inventory.items(), key=lambda item: item[1]["price"], reverse=not ascending)
+    return dict(sorted_items)
+
+def display_sorted_catalog(inventory, ascending=True):
+    #Sorts the inventory by price and prints it as a clean table.
+    sorted_items = sort_catalog_by_price(inventory, ascending=ascending)
+    
+    direction = "Ascending (Low to High)" if ascending else "Descending (High to Low)"
+    print(f"\n--- Product Catalog ({direction}) ---\n")
+    print(f"{'ID':<7} | {'Item Name':<27} | {'Price':<16} | {'Stock':<15}")
+    print("-" * 52)
+    
+    for item_id, data in sorted_items.items():
+        name = data["name"]
+        price = f"${data['price']:.2f}"
+        stock = data["stock"]
+        print(f"{item_id:<7} | {name:<27} | {price:<16} | {stock:<15}")
+    
+    print("-" * 52)
