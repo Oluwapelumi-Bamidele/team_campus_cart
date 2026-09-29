@@ -23,3 +23,11 @@ def update_stock(inventory, item_id, qty_change):
         return False, "Error: Your demand is higher than the quantity available"
     return False, "Errror: Item ID not found"
 
+def calc_price(base_price, tax_rate=0.075, order_total=0.0):
+    #calculate the final price (including tax and conditional discount)
+    #apllies 10% discount if overall order exceeds $20
+    discount = 0.10 if order_total > 20 else 0.0
+    
+    discounted_price = base_price * (1 - discount)
+    final_price = discounted_price * (1 + tax_rate)
+    return round(final_price, 2)
