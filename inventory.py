@@ -79,3 +79,42 @@ def display_sorted_catalog(inventory, ascending=True):
         print(f"{item_id:<7} | {name:<27} | {price:<16} | {stock:<15}")
     
     print("-" * 52)
+    
+# Local independent verification script block
+if __name__ == "__main__":
+    campus_inventory = {
+        "101": {"name": "Notebook", "price": 2.50, "stock": 15},
+        "102": {"name": "Campus Hoodie", "price": 25.00, "stock": 4},
+        "103": {"name": "Scientific Calculator", "price": 15.00, "stock": 8}
+    }
+    
+    print("--- Testing Inventory Module ---\n")
+    print(f"Stock for item 101: {check_stock(campus_inventory, '101')}\n")
+    
+    # Test price quote where it triggers 10% discount when order total exceed $20
+    quote = calc_price(25.00, order_total=25.00)
+    print(f"Price quote for $25 item (with order total > $20 discount): ${quote}\n")
+    
+    #Test update_stock where it check for stock availablity and return a message
+    success, message = update_stock(campus_inventory, '102', -5)
+    print(f"Stock Update Test: Success = {success}, Result = {message}\n")
+    
+    #Test fiter_low_stock where filter out items that is below a certain limit
+    low_stock = filter_low_stock(campus_inventory, limit=10)
+    print(f"Low Stock Items (<10): {low_stock}\n")
+    
+    # This single line handles the filtering and prints the professional table automatically!
+    display_low_stock_report(campus_inventory, limit=10)
+    print("\n")
+    
+    #Test sort_catalog_price where price is sorted in ascending order of its price
+    sorted_catalog = sort_catalog_by_price(campus_inventory, ascending=True)
+    print(f"Sorted Catalog by Price: {sorted_catalog}\n")
+    
+    # This single line dispaly price in ascending order of its price
+    display_sorted_catalog(campus_inventory, ascending=True)
+    print("\n")
+    
+    # This single line dispaly price in descending order of its price
+    display_sorted_catalog(campus_inventory, ascending=False)
+    
