@@ -11,11 +11,11 @@ def add_item(cart, name, price):
     return cart
 
 def calculate_subtotal(cart):
-    """Calculates the subtotal of items in the cart[cite: 1, 5]."""
+    """Calculates the subtotal of items in the cart"""
     return sum(item["price"] for item in cart)
 
 def stream_receipt_lines(cart):
-    """Generator function to stream receipt lines sequentially[cite: 1, 5]."""
+    """Generator function to stream receipt lines sequentially"""
     for item in cart:
         yield f"{item['name']} - ${item['price']}"
     yield f"Subtotal: ${calculate_subtotal(cart)}"
