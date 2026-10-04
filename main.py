@@ -1,4 +1,4 @@
-'''Main Script'''
+'''Main Python Script'''
 
 from inventory import (
     calc_price,
