@@ -1,5 +1,6 @@
 """
-A logger module that uses decorator function to add logging to any transaction function
+Decorator function that adds logging to any transaction function
+
 """
 
 def log_transaction(func):
