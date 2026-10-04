@@ -1,5 +1,6 @@
 """
 Decorator function that adds logging to any transaction function
+
 """
 
 def log_transaction(func):
