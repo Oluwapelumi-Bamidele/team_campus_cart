@@ -1,32 +1,35 @@
 # Campus Cart – Student Store System
 
-A command-line point-of-sale and inventory application for a campus store. Browse a product catalog, check low-stock items, build a shopping cart, and check out with automatic discounts and tax.
+A command-line point-of-sale and inventory application for a campus store. Students can browse a product catalog, check low-stock items, build a shopping cart, and check out with automatic discounts and tax. Administrators can restock, adjust, add, and delete products.
 
 ## Features
 
-- **Product catalog** – view all 15 products sorted by price (low to high or high to low)
+- **Two role interfaces** – a User / Student interface and an Administrator interface
+- **Product catalog** – view all 10 products sorted by price (low to high or high to low)
 - **Low-stock report** – list items whose stock is below a threshold you choose
 - **Shopping cart** – add items by ID; inventory is deducted automatically
+- **Cart editing** – remove some or all of an item, or clear the cart; stock is returned to inventory
 - **Receipt streaming** – cart contents are printed line by line using a generator
 - **Checkout** – applies a 10% discount on orders over $20, then 7.5% tax
 - **Transaction logging** – a decorator tracks and reports the number of completed transactions
+- **Admin tools** – restock items, directly modify stock, add new products, and delete products
 
 ## Project Structure
 
 ```
 campus-cart/
-├── main.py        # Entry point: inventory setup, menu loop, checkout
+├── main.py        # Entry point: inventory setup, user/admin menus, checkout
 ├── inventory.py   # Stock management, pricing, filtering, sorting, reports
 ├── cart.py        # Cart operations and receipt generation
 └── logger.py      # @log_transaction decorator
 ```
 
-| File           | Responsibility                                                                                                                                 |
-| -------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
-| `main.py`      | Initializes the mock inventory, runs the interactive menu, and defines the decorated `checkout_order` function                                 |
-| `inventory.py` | `check_stock`, `update_stock`, `calc_price`, `filter_low_stock`, `display_low_stock_report`, `sort_catalog_by_price`, `display_sorted_catalog` |
-| `cart.py`      | `add_item`, `calculate_subtotal`, `stream_receipt_lines` (generator)                                                                           |
-| `logger.py`    | `log_transaction` decorator using a closure to count transactions                                                                              |
+| File           | Responsibility                                                                                                                                                                                        |
+| -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `main.py`      | Initializes the mock inventory, runs the role selection, user and admin menu loops, and defines the decorated `checkout_order` function                                                               |
+| `inventory.py` | `check_stock`, `update_stock`, `verify_and_add_stock`, `add_new_item`, `delete_item`, `calc_price`, `filter_low_stock`, `display_low_stock_report`, `sort_catalog_by_price`, `display_sorted_catalog` |
+| `cart.py`      | `add_item`, `remove_item`, `calculate_subtotal`, `stream_receipt_lines` (generator)                                                                                                                   |
+| `logger.py`    | `log_transaction` decorator using a closure to count transactions                                                                                                                                     |
 
 ## Requirements
 
@@ -44,23 +47,48 @@ python main.py
 
 ## Usage
 
+**Role Selection**
+
 ```
---- Main Menu ---
-1. View Product Catalog (Sorted by Price)
+1. User / Student Interface
+2. Administrator Interface
+3. Exit System
+```
+
+**User Menu**
+
+```
+1. View Product Catalog
 2. Search / Check Low Stock Items
 3. Add Item to Cart
-4. View Cart & Stream Receipt
-5. Checkout & Complete Order
-6. Exit Application
+4. Remove Item from Cart
+5. View Cart & Stream Receipt
+6. Clear Cart
+7. Checkout & Complete Order
+8. Switch Role / Return to Main Landing
+```
+
+**Administrator Menu**
+
+```
+1. View Full Catalog (Includes Stock & Unit Codes)
+2. Check Stock Below Threshold Limit
+3. Restock Item
+4. Directly Modify Item Stock (Add/Remove)
+5. Add Brand New Product to Catalog
+6. Delete Item from Catalog
+7. Return to Role Selection / Main Interface
+8. Exit Application Entirely
 ```
 
 **Typical workflow**
 
-1. Choose `1` to browse the catalog and pick a sort order.
-2. Choose `3`, then enter an Item ID (e.g. `101`) to add it to your cart. Repeat for more items.
-3. Choose `4` to review your cart.
-4. Choose `5`, review the receipt, and confirm with `y` to pay.
-5. Choose `6` to exit.
+1. Choose `1` at the role screen to enter the User interface.
+2. Choose `1` to browse the catalog and pick a sort order.
+3. Choose `3`, then enter an Item ID (e.g. `101`) and a quantity to add it to your cart. Repeat for more items.
+4. Choose `5` to review your cart and receipt preview.
+5. Choose `7`, review the final receipt, and confirm with `y` to pay.
+6. Choose `8` to return to role selection, then `3` to exit.
 
 ## Pricing Rules
 
@@ -85,11 +113,6 @@ Example: a $25.00 order → $22.50 after discount → **$24.19** with tax.
 | 108 | Water Bottle             | $9.99  | 12    |
 | 109 | Desk Lamp                | $19.95 | 3     |
 | 110 | Sticky Notes             | $1.99  | 55    |
-| 111 | Graph Paper Pad          | $3.25  | 9     |
-| 112 | Campus T-Shirt           | $14.00 | 25    |
-| 113 | Laptop Sleeve            | $17.50 | 7     |
-| 114 | Stapler                  | $7.80  | 14    |
-| 115 | Ruler Set                | $2.10  | 30    |
 
 Inventory lives in memory and resets each time the program starts.
 
@@ -100,11 +123,17 @@ Inventory lives in memory and resets each time the program starts.
 - **Generators** – `stream_receipt_lines` yields receipt lines one at a time
 - **Decorators and closures** – `@log_transaction` tracks transaction counts without global variables
 - **Dictionary and list comprehensions** – used in filtering and subtotal calculation
-- **Input validation** – menu choices, stock thresholds, and item IDs are checked
+- **Input validation** – menu choices, stock thresholds, quantities, and item IDs are checked
 
 ## Testing Modules Individually
 
 `inventory.py`, `cart.py`, and `logger.py` each include an `if __name__ == "__main__":` block for quick standalone checks:
+
+```bash
+python inventory.py
+python cart.py
+python logger.py
+```
 
 ## PROJECT MEMBERS
 
