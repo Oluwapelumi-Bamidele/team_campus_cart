@@ -17,3 +17,12 @@ def wrapper(*args, **kwargs):
         return result
         
     return wrapper
+
+# Local verification block
+if __name__ == "__main__":
+    @log_transaction
+    def make_payment(amount):
+        return f"Paid {amount}"
+
+    make_payment(5000)
+    make_payment(2000)
